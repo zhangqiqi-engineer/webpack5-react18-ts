@@ -16,8 +16,9 @@ module.exports = {
   module: {
     rules: [
       {
+        include: [path.resolve(__dirname, '../src')], //只对项目src文件的ts,tsx进行loader解析
         test: /.(ts|tsx)$/, // 匹配.ts, tsx文件
-        use: 'babel-loader'
+        use: ['thread-loader','babel-loader']
       },
       {
         test: /.(css|less)$/, //匹配 css和less 文件
@@ -63,6 +64,10 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.tsx', '.ts'],
+    alias: {
+      '@': path.join(__dirname, '../src')
+    },
+    modules: [path.resolve(__dirname, '../node_modules')], // 查找第三方模块只在本项目的node_modules中查找
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -73,7 +78,9 @@ module.exports = {
       'process.env.BASE_ENV': JSON.stringify(process.env.BASE_ENV)
     })
   ],
-
+  cache: {
+    type: 'filesystem', // 使用文件缓存
+  },
 
 }
 
